@@ -17,7 +17,8 @@ namespace assignment.pages
 
         public async Task GoToAsset()
         {
-            await page.GetByRole(AriaRole.Link, new() { Name = "Asset" }).ClickAsync();
+            // Click the anchor that wraps the Assets tile (reliable for the dashboard layout)
+            await page.Locator("a:has(div:has-text(\"Assets\"))").ClickAsync();
 
         }
     }

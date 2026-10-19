@@ -17,7 +17,7 @@ namespace assignment.pages
 
         public async Task CreateAsset()
         {
-            await page.GetByRole(AriaRole.Button, new() { Name = "btnAdd" }).ClickAsync();
+            await page.Locator("button[name='btnAdd']").ClickAsync();
 
         }
     }

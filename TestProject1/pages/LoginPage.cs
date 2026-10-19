@@ -12,14 +12,13 @@ namespace assignment.pages
         public LoginPage(IPage page)
         {
             this.page = page;
-
         }
 
         public async Task Login(string username, string password)
         {
             await page.GotoAsync("https://demo.snipeitapp.com/login");
-            await page.Locator("#username").FillAsync("admin");
-            await page.Locator("#password-field").FillAsync("password");
+            await page.Locator("#username").FillAsync(username);
+            await page.Locator("#password-field").FillAsync(password);
             await page.Locator("#submit").ClickAsync();
 
         }

@@ -18,8 +18,10 @@ namespace assignment.pages
         public async Task SelectCompany(String companyName)
         {
             await page.Locator("#select2-company_id_select-container").ClickAsync();
-            await page.Locator(".select2 - search__field").FillAsync(companyName);
-            await page.GetByRole(AriaRole.Option, new() { Name = companyName, Exact = false }).ClickAsync();
+            await page.Locator(".select2-search__field").FillAsync(companyName);
+            var optionSelector = $".select2-results__option:has-text(\"{companyName}\")";
+            await page.WaitForSelectorAsync(optionSelector);
+            await page.Locator(optionSelector).ClickAsync();
         }
         public async Task AddTag(String tag)
         {
@@ -32,8 +34,10 @@ namespace assignment.pages
         public async Task SelectModel(String modelName)
         {
             await page.Locator("#select2-model_select_id-container").ClickAsync();
-            await page.Locator(".select2 - search__field").FillAsync(modelName);
-            await page.GetByRole(AriaRole.Option, new() { Name = modelName, Exact = false }).ClickAsync();
+            await page.Locator(".select2-search__field").FillAsync(modelName);
+            var optionSelector = $".select2-results__option:has-text(\"{modelName}\")";
+            await page.WaitForSelectorAsync(optionSelector);
+            await page.Locator(optionSelector).ClickAsync();
         }
 
         public async Task SaveAsset()
