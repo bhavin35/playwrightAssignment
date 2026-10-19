@@ -25,10 +25,14 @@ namespace assignment.testcases
 
             await asset.CreateAsset();
 
+            var tag = $"SNIPE-{DateTime.UtcNow:yyyyMMddHHmmss}";
+            var serial = $"SN-{DateTime.UtcNow:fff}";
             await createAsset.SelectCompany("Adams Ltd");
-            await createAsset.AddTag("SNIPE-1760431");
-            await createAsset.AddSerial("test123");
+            await createAsset.AddTag(tag);
+            await createAsset.AddSerial(serial);
             await createAsset.SelectModel("Macbook Pro 13");
+            await createAsset.SelectStatus("Ready to Deploy");
+            await createAsset.SelectUser("Efren Anderson");
             await createAsset.SaveAsset();
 
 

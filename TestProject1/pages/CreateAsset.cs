@@ -1,6 +1,7 @@
 ﻿using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace assignment.pages
@@ -39,7 +40,23 @@ namespace assignment.pages
             await page.WaitForSelectorAsync(optionSelector);
             await page.Locator(optionSelector).ClickAsync();
         }
-
+        public async Task SelectStatus(String statusName)
+        {
+            
+            await page.Locator("#select2-status_select_id-container").ClickAsync();
+            await page.Locator(".select2-search__field").FillAsync(statusName);
+            var optionSelector = $".select2-results__option:has-text(\"{statusName}\")";
+            await page.WaitForSelectorAsync(optionSelector);
+            await page.Locator(optionSelector).ClickAsync();
+        }
+        public async Task SelectUser(String userName)
+        {
+   
+            await page.Locator("#select2-assigned_user_select-container").ClickAsync(); 
+            await page.Locator(".select2-search__field").FillAsync(userName);
+            await page.WaitForSelectorAsync(".select2-results__option");
+            await page.Locator(".select2-results__option").GetByText(userName, new() { Exact = false }).First.ClickAsync();
+        }
         public async Task SaveAsset()
         {
            
