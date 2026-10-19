@@ -1,0 +1,2 @@
+Important: The Snipe-IT demo database is frequently refreshed (approximately every hour). As a result, company and user records may change.
+If test case TC001 fails because the selected company or user is unavailable, update the values passed to SelectCompany() and SelectUser() in the test case using currently available records, then rerun the test.
