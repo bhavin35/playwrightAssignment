@@ -19,7 +19,7 @@ namespace assignment.pages
         {
             await page.GotoAsync("https://demo.snipeitapp.com/login");
             await page.Locator("#username").FillAsync("admin");
-            await page.Locator("#password").FillAsync("password");
+            await page.Locator("#password-field").FillAsync("password");
             await page.Locator("#submit").ClickAsync();
 
         }
