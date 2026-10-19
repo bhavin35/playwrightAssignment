@@ -42,7 +42,8 @@ namespace assignment.pages
 
         public async Task SaveAsset()
         {
-            await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+           
+            await page.Locator("#submit_button").First.ClickAsync();
         }
     }
 }

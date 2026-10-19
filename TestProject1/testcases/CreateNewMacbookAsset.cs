@@ -25,7 +25,7 @@ namespace assignment.testcases
 
             await asset.CreateAsset();
 
-            await createAsset.SelectCompany("Cremin Ltd");
+            await createAsset.SelectCompany("Adams Ltd");
             await createAsset.AddTag("SNIPE-1760431");
             await createAsset.AddSerial("test123");
             await createAsset.SelectModel("Macbook Pro 13");
