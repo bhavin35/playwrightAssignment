@@ -8,9 +8,9 @@ using NUnit.Framework;
 
 namespace assignment.testcases
 {
-    public class CreateNewMacbookAsset:PageTest
+    public class CreateNewMacbookAsset : PageTest
     {
-        // Shared values between tests when running in sequence
+
         private static string createdSerial;
         private static string createdTag;
         private static string createdModel;
@@ -42,7 +42,7 @@ namespace assignment.testcases
             await createAsset.SelectUser("Layla");
             await createAsset.SaveAsset();
 
-            // store for subsequent test
+
             createdSerial = serial;
             createdTag = tag;
             createdModel = "Macbook Pro 13";
@@ -51,11 +51,13 @@ namespace assignment.testcases
 
         }
 
+
+
         [Test]
         [Order(2)]
         public async Task TC002()
         {
-            // Search for the serial used in TC001 and verify it appears in the results table
+
             var login = new LoginPage(Page);
             var dashboard = new DashboardPage(Page);
 
@@ -64,7 +66,7 @@ namespace assignment.testcases
 
             await dashboard.GoToAsset();
 
-            // Use the top lookup/search box to find the asset by serial (created in TC001)
+
             if (string.IsNullOrEmpty(createdSerial))
             {
                 throw new InvalidOperationException("TC001 should run before TC002");
@@ -73,7 +75,7 @@ namespace assignment.testcases
             await Page.FillAsync("input[placeholder='Lookup by Asset Tag']", serial);
             await Page.Keyboard.PressAsync("Enter");
 
-            // Wait for the assets table to show a row containing the serial
+
             await Page.WaitForSelectorAsync($"table tbody tr:has-text(\"{serial}\")");
             var row = Page.Locator($"table tbody tr:has-text(\"{serial}\")").First;
             await Expect(row).ToBeVisibleAsync();
@@ -85,7 +87,7 @@ namespace assignment.testcases
         [Order(3)]
         public async Task TC003()
         {
-            // Click the serial from the search results and verify details on the asset detail page
+
             var login = new LoginPage(Page);
             var dashboard = new DashboardPage(Page);
 
@@ -102,11 +104,11 @@ namespace assignment.testcases
             var serial = createdSerial;
             var tag = createdTag;
 
-            // Search for the asset
+
             await Page.FillAsync("input[placeholder='Lookup by Asset Tag']", serial);
             await Page.Keyboard.PressAsync("Enter");
 
-            // Wait for the row and click the serial link to navigate to detail page
+
             var row = Page.Locator($"table tbody tr:has-text(\"{serial}\")").First;
             await row.WaitForAsync();
 
@@ -114,7 +116,7 @@ namespace assignment.testcases
             await row.Locator($"a:has-text(\"{serial}\")").ClickAsync();
             await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
 
-            
+
             var tagText = (await Page.Locator("dl.table-display .js-copy-asset_tag").InnerTextAsync())?.Trim();
             var serialText = (await Page.Locator("li#serial-number .js-copy-license_key code").InnerTextAsync())?.Trim();
             var modelText = (await Page.Locator("li#model .js-copy-asset_model").InnerTextAsync())?.Trim();
@@ -125,6 +127,50 @@ namespace assignment.testcases
             NUnit.Framework.Assert.That(modelText.Contains(createdModel), NUnit.Framework.Is.True, $"Model not found. Actual: '{modelText}'");
             NUnit.Framework.Assert.That(userText, NUnit.Framework.Is.Not.Null.And.Not.Empty, $"User not present on detail page. Actual: '{userText}'");
         }
+
+
+        [Test]
+        [Order(4)]
+        public async Task TC004()
+        {
+            
+            var login = new LoginPage(Page);
+            var dashboard = new DashboardPage(Page);
+
+            await login.Login("admin", "password");
+            await Expect(Page).ToHaveTitleAsync("Dashboard :: Snipe-IT Asset Management Demo");
+
+            await dashboard.GoToAsset();
+
+            if (string.IsNullOrEmpty(createdSerial))
+            {
+                throw new InvalidOperationException("TC001 should run before TC004");
+            }
+
+            var serial = createdSerial;
+
+           
+            await Page.FillAsync("input[placeholder='Lookup by Asset Tag']", serial);
+            await Page.Keyboard.PressAsync("Enter");
+
+            var row = Page.Locator($"table tbody tr:has-text(\"{serial}\")").First;
+            await row.WaitForAsync();
+            await row.Locator($"a:has-text(\"{serial}\")").ClickAsync();
+            await Page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+
+            
+            await Page.ClickAsync("a[href='#history']");
+            await Page.WaitForSelectorAsync("#history table tbody tr");
+
+            var historyRow = Page.Locator("#history table tbody tr").First;
+
+            
+            var createdBy = (await historyRow.Locator("td").Nth(2).InnerTextAsync())?.Trim();
+            var action = (await historyRow.Locator("td").Nth(3).InnerTextAsync())?.Trim();
+
+            // Verify created user and action values in the first history table row
+            NUnit.Framework.Assert.That(createdBy, NUnit.Framework.Is.EqualTo("Admin User"), $"Created By mismatch. Actual: '{createdBy}'");
+            NUnit.Framework.Assert.That(action, NUnit.Framework.Is.EqualTo("create new"), $"Action mismatch. Actual: '{action}'");
+        }
     }
 }
-
