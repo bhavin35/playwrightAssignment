@@ -17,7 +17,7 @@ namespace assignment.pages
 
         public async Task GoToAsset()
         {
-            // Click the anchor that wraps the Assets tile (reliable for the dashboard layout)
+          
             await page.Locator("a:has(div:has-text(\"Assets\"))").ClickAsync();
 
         }
